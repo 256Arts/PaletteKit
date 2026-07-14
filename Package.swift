@@ -20,7 +20,12 @@ let package = Package(
         .package(path: "../ChromaKit"),
     ],
     targets: [
-        .target(name: "PaletteKit", dependencies: ["ChromaKit"]),
+        .target(
+            name: "PaletteKit",
+            dependencies: ["ChromaKit"],
+            // The premade palettes, as 1px-tall PNGs. `.process` flattens them into the resource
+            // bundle, so `Bundle.module.url(forResource:withExtension:)` finds each by name.
+            resources: [.process("Resources")]),
         .testTarget(name: "PaletteKitTests", dependencies: ["PaletteKit"]),
     ]
 )

@@ -119,3 +119,30 @@ struct PaletteTests {
         #expect(a != b)
     }
 }
+
+@Suite("CSS notation")
+struct PaletteColorCSSTests {
+
+    @Test("Lab and P3 are output-only formats — they don't parse back in")
+    func outputOnlyFormats() {
+        let black = PaletteColor(lightnessFraction: 0, chromaFraction: 0, hueAngle: .zero)
+
+        let lab = black.cssString(colorSpace: .lab, convertedToP3: false)
+        #expect(lab == "lab(0 0 0)")
+        #expect(PaletteColor(css: lab) == nil)
+
+        let p3 = black.cssString(colorSpace: .lab, convertedToP3: true)
+        #expect(p3 == "color(display-p3 0 0 0)")
+        #expect(PaletteColor(css: p3) == nil)
+    }
+
+    @Test("Lch and Oklch round-trip through CSS", arguments: [ColorSpace.lch, .okLch])
+    func roundTrip(colorSpace: ColorSpace) throws {
+        let original = PaletteColor(lightnessFraction: 0.5, chromaFraction: 0.2, hueAngle: .degrees(90))
+        let parsed = try #require(PaletteColor(css: original.cssString(colorSpace: colorSpace, convertedToP3: false)))
+
+        #expect(abs(parsed.lightnessFraction - 0.5) < 1e-6)
+        #expect(abs(parsed.chromaFraction - 0.2) < 1e-6)
+        #expect(abs(parsed.hueAngle.degrees - 90) < 1e-6)
+    }
+}
