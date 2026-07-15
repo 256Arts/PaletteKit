@@ -150,7 +150,7 @@ public struct PaletteColor: Equatable, Hashable, Identifiable, Codable, Sendable
     private func rawSRGBComponents(colorSpace: ColorSpace) -> (r: CGFloat, g: CGFloat, b: CGFloat) {
         let color = systemColor(colorSpace: colorSpace)
         var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0
-        #if canImport(AppKit)
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
         if let srgb = color.usingColorSpace(.sRGB) {
             (r, g, b) = (srgb.redComponent, srgb.greenComponent, srgb.blueComponent)
         }

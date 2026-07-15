@@ -1,4 +1,5 @@
-#if canImport(AppKit)
+// Catalyst can import AppKit but marks NSColorList unavailable, so exclude it too.
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
 import AppKit
 import SwiftUI
 import UniformTypeIdentifiers

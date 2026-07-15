@@ -6,7 +6,7 @@ public extension Palette {
     /// Every file type a palette can be imported from, for a file importer's `allowedContentTypes`.
     /// `.clr` is macOS-only, matching `NSColorList`.
     static var importableContentTypes: [UTType] {
-        #if canImport(AppKit)
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
         [.gimpPalette, .png, .colorList]
         #else
         [.gimpPalette, .png]
@@ -24,7 +24,7 @@ public extension Palette {
             { Palette(gplFile: $0, colorSpace: $1) },
             { Palette(paletteImageFile: $0, colorSpace: $1) },
         ]
-        #if canImport(AppKit)
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
         parsers.append { Palette(clrFile: $0, colorSpace: $1) }
         #endif
 
