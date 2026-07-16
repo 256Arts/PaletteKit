@@ -1,0 +1,15 @@
+{
+  "originHash" : "a6678423eeab8479d0223b698af092b06a7c8376e66f2e7d164b86fb1f0e552d",
+  "pins" : [
+    {
+      "identity" : "chromakit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/256Arts/ChromaKit.git",
+      "state" : {
+        "revision" : "9ba9a5a4cc2f7c867c3b657bd58afa9c328ad0eb",
+        "version" : "1.1.0"
+      }
+    }
+  ],
+  "version" : 3
+}
