@@ -26,11 +26,14 @@ public enum ColorSpace: String, CaseIterable, Identifiable, Codable, Sendable {
     }
 
     /// The absolute chroma value at `chromaFraction == 1`.
+    ///
+    /// This is the chroma the 3D view's sphere surface stands for: the widest Display P3 reaches
+    /// once each lightness layer is shrunk to the sphere (`max C · sqrt(1 - (2L-1)²)` over the
+    /// gamut). P3 therefore fills the sphere's diameter, and wider gamuts plot outside it.
     public var chromaScale: Double {
         switch self {
-        case .lch: 150
-        case .lab: 125
-        case .okLab, .okLch: PaletteColor.maxChromaP3
+        case .lab, .lch: 132.9
+        case .okLab, .okLch: 0.3227
         }
     }
 }

@@ -361,8 +361,6 @@ public struct PaletteColor: Equatable, Hashable, Identifiable, Codable, Sendable
         colors.map { $0.string(representation, colorSpace: colorSpace, gamut: gamut) }.joined(separator: "\n")
     }
 
-    public static let maxChromaP3 = 0.4
-
     static let cssDecimalFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.minimumFractionDigits = 0

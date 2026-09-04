@@ -34,7 +34,7 @@ public final class PaletteGenerator {
         /// Whether the 1st chroma level is just a single grayscale color.
         public var chromaStartsAtZero = true
 
-        /// Chroma multiplier (0.5 = all colors have half the chroma).
+        /// Chroma as a fraction of Display P3 (0.5 = all colors have half the chroma P3 can reach).
         public var chromaMultiplier = 1.0
 
         /// Number of different hues at the largest chroma level.
