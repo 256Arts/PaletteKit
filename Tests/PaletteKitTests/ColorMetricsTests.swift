@@ -74,4 +74,14 @@ struct ColorMetricsTests {
         #expect(stats.standardDeviation == 2)
         #expect(DescriptiveStats([]) == nil)
     }
+
+    @Test("Nearest-color matching picks the perceptually closest candidate")
+    func nearestColorMatcher() throws {
+        let candidates = try ["#000000", "#FFFFFF", "#FF3329"].map { try #require(PaletteColor(hex: $0, colorSpace: .okLch)) }
+        let matcher = NearestColorMatcher(candidates, colorSpace: .okLch)
+        #expect(matcher.nearestIndex(to: try #require(PaletteColor(hex: "#FA3C32", colorSpace: .okLch))) == 2)
+        #expect(matcher.nearestIndex(to: try #require(PaletteColor(hex: "#101010", colorSpace: .okLch))) == 0)
+        #expect(matcher.nearestIndex(to: candidates[1]) == 1)
+        #expect(NearestColorMatcher([], colorSpace: .okLch).nearestIndex(to: candidates[0]) == nil)
+    }
 }

@@ -171,6 +171,26 @@ public extension PaletteColor {
     }
 }
 
+/// Finds the perceptually nearest (smallest ΔE₀₀) of a fixed set of colors — e.g. to snap artwork onto
+/// a palette. The candidates are converted to Lab once, up front, so each lookup costs one conversion.
+public struct NearestColorMatcher {
+
+    private let candidates: [Lab]
+    private let colorSpace: ColorSpace
+
+    /// Prepares to match against `colors`, each realized in `colorSpace`.
+    public init(_ colors: [PaletteColor], colorSpace: ColorSpace) {
+        self.colorSpace = colorSpace
+        candidates = colors.map { ColorMetrics.labAndLuminance($0.p3(colorSpace: colorSpace)).lab }
+    }
+
+    /// The index of the candidate nearest to `color` (the first, on a tie), or `nil` if there are none.
+    public func nearestIndex(to color: PaletteColor) -> Int? {
+        let lab = ColorMetrics.labAndLuminance(color.p3(colorSpace: colorSpace)).lab
+        return candidates.indices.min { ColorMetrics.deltaE2000(lab, candidates[$0]) < ColorMetrics.deltaE2000(lab, candidates[$1]) }
+    }
+}
+
 /// Mean / median / mode / min / max / standard deviation over a set of samples.
 public struct DescriptiveStats: Hashable, Sendable {
 
