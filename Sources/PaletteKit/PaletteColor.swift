@@ -151,7 +151,8 @@ public struct PaletteColor: Equatable, Hashable, Identifiable, Codable, Sendable
         let color = systemColor(colorSpace: colorSpace)
         var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0
         #if canImport(AppKit) && !targetEnvironment(macCatalyst)
-        if let srgb = color.usingColorSpace(.sRGB) {
+        // `.sRGB` clamps to [0, 1], which would hide every out-of-gamut color; UIKit's `getRed` is already extended.
+        if let srgb = color.usingColorSpace(.extendedSRGB) {
             (r, g, b) = (srgb.redComponent, srgb.greenComponent, srgb.blueComponent)
         }
         #else

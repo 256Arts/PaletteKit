@@ -1,5 +1,6 @@
 import Testing
 import SwiftUI
+import ChromaKit
 @testable import PaletteKit
 
 /// A spread of safely in-gamut sRGB colors used across the round-trip tests.
@@ -144,5 +145,22 @@ struct PaletteColorCSSTests {
         #expect(abs(parsed.lightnessFraction - 0.5) < 1e-6)
         #expect(abs(parsed.chromaFraction - 0.2) < 1e-6)
         #expect(abs(parsed.hueAngle.degrees - 90) < 1e-6)
+    }
+}
+
+@Suite("Gamut detection")
+struct GamutTests {
+
+    @Test("A Display P3 primary is outside sRGB but inside P3", arguments: ColorSpace.allCases)
+    func p3RedIsWideOfSRGB(colorSpace: ColorSpace) {
+        let red = PaletteColor(P3(r: 1, g: 0, b: 0), colorSpace: colorSpace)
+        #expect(red.isOutsideSRGBGamut(colorSpace: colorSpace))
+        #expect(Gamut.containing([red], colorSpace: colorSpace) == .displayP3)
+    }
+
+    @Test("An sRGB grey stays in sRGB", arguments: ColorSpace.allCases)
+    func greyIsSRGB(colorSpace: ColorSpace) {
+        let grey = PaletteColor(sRGB8BitRed: 128, green: 128, blue: 128, colorSpace: colorSpace)!
+        #expect(Gamut.containing([grey], colorSpace: colorSpace) == .sRGB)
     }
 }
